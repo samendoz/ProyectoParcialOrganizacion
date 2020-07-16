@@ -1,0 +1,68 @@
+.data
+
+
+text1:  .asciiz "Ingresa un numero: "
+text2:  .asciiz "Error: Ingrese un número entre 1 y 11: "
+text3:   .asciiz "entro en fail nulo:   "
+buffer: .space 20
+		.text		
+ main:
+	#Imprimir texto
+        li $v0, 4
+        la $a0, text1
+        syscall
+inicio:
+        #Obtener string de usuario
+        li $s4, 10
+        li $v0, 8
+        la $a0, buffer
+        li $a1, 20
+        syscall
+
+	#verificar entero entre numeros
+	la $s0, buffer
+	lbu   $s1, ($s0)      
+	lbu   $s2, 1 ($s0)
+	
+	# verificamos caso de 2 digitos
+	#verifica el caso de decena siendo  1
+	sltiu $t2, $s1, 49  # t1 = (x < 1) ? 1 : 0
+    	bnez  $t2, fail
+    	sltiu $t2, $s1, 50  # t1 = (x < 2) ? 1 : 0
+    	beqz  $t2, caso2
+    	beq  $s2,$s4, proseguir
+    	
+    	#verificamos
+    	sltiu $t2, $s2, 48  # t1 = (x < 0) ? 1 : 0
+    	bnez  $t2, fail
+    	sltiu $t2, $s2, 50  # t1 = (x < 2) ? 1 : 0
+    	beqz  $t2, fail
+    	
+    	j proseguir
+ 
+ caso2:
+ 	#verificamos caso de un solo digito	
+   	sltiu $t2, $s1, 49  # t1 = (x < 49) ? 1 : 0
+    	bnez  $t2, fail
+    	sltiu $t2, $s1, 58  # t1 = (x < 58) ? 1 : 0
+    	beqz  $t2, fail
+    		
+    	#verifiacmos que no posea segundo digito   	
+    	bne  $s2,$s4, fail
+    	
+proseguir:
+        #Print string de numero
+        li $v0, 4
+        la $a0, buffer
+        syscall
+
+        #Terminar programa
+        li $v0, 10
+        syscall
+	
+fail:	
+	#Imprimir texto
+	li $v0, 4
+        la $a0, text2
+        syscall
+	j inicio
