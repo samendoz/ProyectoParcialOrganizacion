@@ -34,9 +34,10 @@
 		li $t0, 1
 		li $t1, 0
 		li $v0, 0
-		mul  $t2,$t0, $a1	
-		add  $t2, $t2, $t1
-		mul $t2, $t2, $t5
-		add $t2,$t2, $a0
-		l.s $f12, 0($t2)
+		# addr= base address + ((row index * columm size)  + columm index) * DATA_SIZE
+		mul  $t2,$t0, $a1	 #row index * columm size
+		add  $t2, $t2, $t1	#         + columm index
+		mul $t2, $t2, $t5	#         * DATA_SIZE
+		add $t2,$t2, $a0	#          + base address
+		l.s $f12, 0($t2)	 #carga en f12 registro similar a v0 en flotante
 		jr $ra
