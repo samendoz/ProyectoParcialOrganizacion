@@ -1,17 +1,79 @@
 .data
-
-
-text1:  .asciiz "Ingresa un numero: "
-text2:  .asciiz "Error: Ingrese un número entre 1 y 11: "
-text3:   .asciiz "entro en fail nulo:   "
+	text1:  .asciiz "Bienvenido al sistema de combates pokemon:\n"
+	text2:  .asciiz "Error: Ingrese un número  valido (1 al 10):"
+	text3:  .asciiz "1. "
+	text4:  .asciiz "2. "
+	text5:  .asciiz "3. "
+	text6:  .asciiz "4. "
+	text7:  .asciiz "5. "
+	text8:  .asciiz "6. "
+	text9:  .asciiz "7. "
+	text10:  .asciiz "8. "
+	text11:  .asciiz "9. "
+	text12:  .asciiz "10. "	
+	text13:  .asciiz "11 . Salir"
+	text14:  .asciiz "Ingrese el numero del primer pokemon para el combate: "
+	text15:  .asciiz "Ingrese el numero del segundo pokemon para el combate: "
+	text16:  .asciiz "Combatientes: "
+	text17:  .asciiz " vs "
+	text18:  .asciiz " Vida:"
+	text19:  .asciiz " Ataque: "
+	text20:  .asciiz "Resultados del ataque: "
+	text21:  .asciiz " ataca a " 
+	text22:  .asciiz " es el ganador! "
+	salto:  .asciiz "\n"
 buffer: .space 20
 		.text		
- main:
+main:   
 	#Imprimir texto
         li $v0, 4
         la $a0, text1
         syscall
-inicio:
+        
+	#Imprimir texto
+        li $v0, 4
+        la $a0, text14
+        syscall
+        
+        jal pedirNumero
+        move $s0,$v0       
+        
+        #Imprimir texto
+        li $v0, 4
+        la $a0, text15
+        syscall
+        
+        jal pedirNumero
+        move $s1,$v0
+        
+        #Print numero
+        li $v0, 1
+        move $a0, $s0
+        syscall        
+        
+        li $v0, 4
+        la $a0, salto
+        syscall
+        
+        #Print numero
+        li $v0, 1
+        move $a0, $s1
+        syscall
+        
+        #Terminar programa
+        li $v0, 10
+        syscall
+ 
+#inicio funcion pedir numero
+pedirNumero:
+	
+	addi $sp, $sp, -20
+	sw   $ra, 16($sp)      
+	sw $s0, 12($sp)
+	sw $s1, 8($sp)
+	sw $s2, 4($sp)
+	sw $s3, 0($sp)
+        
         #Obtener string de usuario
         li $s4, 10
         li $v0, 8
@@ -20,49 +82,97 @@ inicio:
         syscall
 
 	#verificar entero entre numeros
+	#Obtiene el primer y posible segundo digito
 	la $s0, buffer
 	lbu   $s1, ($s0)      
 	lbu   $s2, 1 ($s0)
+	lbu   $s3  2 ($s0)
 	
 	# verificamos caso de 2 digitos
 	#verifica el caso de decena siendo  1
-	sltiu $t2, $s1, 49  # t1 = (x < 1) ? 1 : 0
-    	bnez  $t2, fail
-    	sltiu $t2, $s1, 50  # t1 = (x < 2) ? 1 : 0
+	sltiu $t2, $s1, 49                # t1 = (x < 1) ? 1 : 0
+    	bnez  $t2, fallo
+    	sltiu $t2, $s1, 50                # t1 = (x < 2) ? 1 : 0
     	beqz  $t2, caso2
-    	beq  $s2,$s4, proseguir
+    	beq  $s2,$s4, proseguir           #En caso de que se ingreso solo el digito 1
     	
     	#verificamos
-    	sltiu $t2, $s2, 48  # t1 = (x < 0) ? 1 : 0
-    	bnez  $t2, fail
-    	sltiu $t2, $s2, 50  # t1 = (x < 2) ? 1 : 0
-    	beqz  $t2, fail
+    	sltiu $t2, $s2, 48                 # t1 = (x < 0) ? 1 : 0
+    	bnez  $t2, fallo
+    	sltiu $t2, $s2, 50                 # t1 = (x < 2) ? 1 : 0
+    	beqz  $t2, fallo
+    	
+    	#verifiacmos que no posea tercer digito   	
+    	bne  $s3,$s4, fallo
     	
     	j proseguir
  
  caso2:
  	#verificamos caso de un solo digito	
-   	sltiu $t2, $s1, 49  # t1 = (x < 49) ? 1 : 0
-    	bnez  $t2, fail
-    	sltiu $t2, $s1, 58  # t1 = (x < 58) ? 1 : 0
-    	beqz  $t2, fail
+   	sltiu $t2, $s1, 49                    # t1 = (x < 49) ? 1 : 0
+    	bnez  $t2, fallo
+    	sltiu $t2, $s1, 58                    # t1 = (x < 58) ? 1 : 0
+    	beqz  $t2, fallo
     		
     	#verifiacmos que no posea segundo digito   	
-    	bne  $s2,$s4, fail
+    	bne  $s2,$s4, fallo
     	
 proseguir:
-        #Print string de numero
-        li $v0, 4
-        la $a0, buffer
-        syscall
+	move $a0, $s0
+	jal convStringtoInt
 
-        #Terminar programa
-        li $v0, 10
-        syscall
+	lw $s3, 0($sp)
+	lw $s2, 4($sp)
+	lw $s1, 8($sp)
+	lw $s0, 12($sp)
+	lw  $ra, 16($sp)      
+	addi $sp, $sp, 20
 	
-fail:	
-	#Imprimir texto
+	jr $ra
+	
+fallo:	
+	#Imprimir texto y pide de nuevo
 	li $v0, 4
         la $a0, text2
         syscall
-	j inicio
+        
+        lw $s3, 0($sp)
+	lw $s2, 4($sp)
+	lw $s1, 8($sp)
+	lw $s0, 12($sp)
+	lw  $ra, 16($sp)      
+	addi $sp, $sp, 20
+	
+	j pedirNumero
+	
+#fin funcion pedir numero
+
+#inicio funcion convertir de string a entero
+convStringtoInt:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+	
+	li $t0, 0                            #acumulador
+	li $t1, 10			     #codigo nueva linea
+	move $t2, $a0			     #obtener direccion de string
+	lbu $t3, ($t2)
+	addi $t0,$t3,-48		     #conversion del primer digito
+	addi $t2, $t2, 1
+	lbu $t3, ($t2)
+	
+bucle:
+	beq $t3, $t1, enviar		     #verificamos si el string valido termino
+	addi $t4,$t3,-48
+	mul $t0, $t0, 10		     #multplicamos por 10 para pasar de unidad a decena etc
+	add $t0, $t0, $t4		     #sumamos el sigueinte digito
+	addi $t2, $t2, 1      		     #avanzamos en string
+   	lbu $t3, ($t2) 	
+	j bucle
+
+enviar:
+	move $v0,$t0
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
+
+#fin funcion convertir string a entero	
