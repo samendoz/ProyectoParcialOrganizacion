@@ -11,8 +11,11 @@ text2:  .asciiz "Error al leer el archivo! \n"
 text3:  .asciiz "Error al escribir el contenido del Buffer! \n"
 #archivo: .asciiz "pokeTypes.txt" #var final nombre archivo
 archivo: .asciiz "C:\\Users\\smend\\Desktop\\pokeTypes.txt"
-buffer: .space 1024
-
+buffer: .space 2000
+prueba: .asciiz "Hello "
+prueba1: .asciiz "World"
+arrTipos: .space 440
+arrPokemones: .space 440
 .text
 
 main:
@@ -29,22 +32,63 @@ main:
 	li $v0, 14 # comando para lectura
 	move $a0, $s0 # descriptor de archivo como argumento
 	la $a1, buffer #buffer de donde se leera
-	li $a2, 1024 #tamano del buffer
+	li $a2, 2000 #tamano del buffer
 	syscall
 	beq $v0, -1, LogErrorRead
 
-	la $s0, buffer #dir inicio buff en $s0
-	li $t0, 0 contador
-	
-	
-
 	#Write File Content
+	#li $v0, 4
+	#la $a0, buffer
+	#syscall
+	#beq $v0, -1, LogErrorWriteBuffer
+	
+	#li $v0, 4
+	#li $t1, 0
+	#la $t0, prueba
+	#sb  $t1, 1($t0)
+	#add $t0, $t0, $t1
+	#lb $t1, 1($t0)
+	#li $t1, 1
+	#add $t0, $t0, $t1
+	#move $a0, $t0
+	#syscall
+	
+	#imprimir solo el primer caracter
+	#la $t0, prueba
+	#lb $t1, 0($t0)
+	#li $v0, 1
+	#move $a0, $t1
+	#syscall
+	
+	#guardar en el array
+	#la $t0, arr
+	#la $t1, prueba
+	#sw $t1, 0($t0)
+	#la $t1, prueba1
+	#sw $t1, 4($t0)
+	
+	#leer cada palabra del array
+	#lw $t1, 0($t0)
+	#li $v0, 4
+	#move $a0, $t1
+	#syscall
+	#lw $t1, 4($t0)
+	#li $v0, 4
+	#move $a0, $t1
+	#syscall
+	
+	
+	
+	jal Split
+	la $t0, arrPokemones
+	lw $a0, 4($t0)
 	li $v0, 4
-	la $a0, buffer
 	syscall
-	beq $v0, -1, LogErrorWriteBuffer
+	la $t0, arrTipos
+	lw $a0, 4($t0)
+	li $v0, 4
+	syscall
 	j Exit
-
 LogErrorOpen:
 	li $v0, 4
         la $a0, text1
@@ -63,23 +107,55 @@ LogErrorWriteBuffer:
         syscall
 	j Exit
 
-/*no funciono
-Loop:
-	addi $t0, $t0, 2 #index+=2
-	#add $t5, $t0, $t0 #array index X2
-	#add $t5, $t0, $t0 #array index X2 again
-	sll $t5, $t0, 2 #index*4
-	add $t6, $t5, $t1 #4x array index in $t6
-  
-	lw $t2, 0($t6)   #load list[index] into $t2
-	#add $t3, $t3, $t2 #$t3 = $t3 + $t2
-	beq $t0, $t4, Exit
-	li $v0, 1
-        move $a0, $t2
-	syscall
+Split: 
+	addi $sp, $sp, -4
+	sw $ra, 0($sp)
+	#condiciones previas
+	li $s0, 44 # valor ascii de la coma ","
+	li $s1, 10 # valor ascii del salto de linea
+	li $t1, 1 #posicion a guardar pokemon
+	li $t2, 0 #posicion a guardar tipo
+	la $s2, buffer #direccion buffer
+	la $s3, arrPokemones #array pokemons
+	la $s4, arrTipos #arr tipos de cada pokemon
+	li $t6, 0 #contador caracteres
+	sw $s2, 0($s3) # primer item de pokemones es la direccion inicial del buffer
+	#sw $s2, 0($s4)
 	j Loop
-*/
-
+	
+Loop: 
+	add $t7, $s2, $t6 # buffer + desplCaracter
+	lb $t8, 0($t7) # caracter guardado en t8
+	beq $t8, $s0, ReemplazarComa # si el caracter es igual a la ","
+	beq $t8, $s1, ReemplazarEOL # si el caracter es igual al salto de linea "\n"
+	beq $t8, $zero, Finalizar #si el caracter es el nulo termina la rutina
+	addi $t6, $t6, 1 #muevo la direccion al siguiente caracter a analizar
+	j Loop
+	
+ReemplazarComa:
+	sb $zero, 0($t7) # pongo 0 donde estaba la ","
+	addi $t9, $t7, 1 #direecion donde arranca despues de la coma
+	sll $t3, $t2, 2 #despl guardar tipo
+	add $t4, $t3, $s4
+	sw $t9, 0($t4) #guardo direccion de tipo en el arreglo de tipos
+	addi $t2, $t2, 1 #incremento posicion de tipo en 1
+	addi $t6, $t6, 1 #muevo la direccion al siguiente caracter a analizar
+	j Loop
+	
+ReemplazarEOL:
+	sb $zero, 0($t7) # pongo 0 donde estaba el salto de linea
+	addi $t9, $t7, 1 #direecion donde arranca despues del salto
+	sll $t3, $t1, 2 #despl guardar pokemon
+	add $t4, $t3, $s3
+	sw $t9, 0($t4) #guardo direccion de Pokemon en el arreglo de pokemones
+	addi $t1, $t1, 1 #incremento posicion de pokemon en 1
+	addi $t6, $t6, 1 #muevo la direccion al siguiente caracter a analizar
+	j Loop
+	
+Finalizar:
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
 Exit:
 	li $v0, 10
 	syscall
