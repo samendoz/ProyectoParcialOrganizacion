@@ -74,6 +74,7 @@ pedirNumero:
 	sw $s2, 4($sp)
 	sw $s3, 0($sp)
         
+regreso:
         #Obtener string de usuario
         li $s4, 10
         li $v0, 8
@@ -135,15 +136,8 @@ fallo:
 	li $v0, 4
         la $a0, text2
         syscall
-        
-        lw $s3, 0($sp)
-	lw $s2, 4($sp)
-	lw $s1, 8($sp)
-	lw $s0, 12($sp)
-	lw  $ra, 16($sp)      
-	addi $sp, $sp, 20
 	
-	j pedirNumero
+	j regreso
 	
 #fin funcion pedir numero
 
