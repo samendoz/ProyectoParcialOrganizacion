@@ -1,0 +1,318 @@
+.data
+	tipo1: .asciiz "normal"
+	tipo2: .asciiz "fight"
+	tipo3: .asciiz "flying" 
+	tipo4: .asciiz "ghost"
+	poke1: .asciiz "poke1"
+	poke2: .asciiz " poke2"
+	salto:  .asciiz "\n"
+	text1: .asciiz "Combatientes: "
+	text2:  .asciiz " vs "
+	text3:  .asciiz " Vida:"
+	text4:  .asciiz " Ataque: "
+	text5:  .asciiz "Resultados del ataque: \n"
+	text6:  .asciiz " ataca a " 
+	text7:  .asciiz " es el ganador ! "
+	text8:  .asciiz ":"
+	text9: .asciiz "!"
+	ndArray:.float 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+		.float  2.0, 1.0, 0.5, 0.5, 1.0, 2.0, 0.5, 0.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5
+		.float  1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0
+		.float  1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 0.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0
+		.float  1.0, 1.0, 0.0, 2.0, 1.0, 2.0, 0.5, 1.0, 2.0, 2.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0 
+		.float  1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 2.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0
+		.float  1.0, 0.5, 0.5 ,0.5, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 2.0, 0.5
+		.float  0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0
+		.float  1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 1.0, 2.0, 1.0, 1.0, 2.0
+		.float  1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5, 0.5, 2.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0 
+		.float  1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 2.0, 0.5, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0
+		.float  1.0, 1.0, 0.5, 0.5, 2.0, 2.0, 0.5, 1.0, 0.5, 0.5, 2.0, 0.5, 1.0, 1.0, 1.0, 0,5, 1.0, 1.0
+		.float  1.0, 1.0, 2.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0
+		.float  1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 0.0, 1.0
+		.float  1.0, 1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 2.0, 1.0, 1.0, 0.5, 2.0, 1.0, 1.0
+		.float  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 0.0
+		.float  1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5
+		.float  1.0, 2.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0
+	size: .word 18 
+	fconst: .float 2.0
+	.eqv DATA_SIZE 4
+.text
+main:
+	li $v0, 4
+        la $a0, text1
+        syscall
+        li $v0, 4
+        la $a0, poke1
+        syscall
+        li $v0, 4
+        la $a0, text2
+        syscall
+        li $v0, 4
+        la $a0, poke2
+        syscall
+        li $v0, 4
+        la $a0, salto
+        syscall
+        
+        la $s0, ndArray
+  	lw $s1, size
+  	li $s2, 5  #poke1
+  	li $s3, 5   #poke2
+  	li $s6, 0   #bandera
+        
+        #se calculan los daños
+	li $a0, 2 #atacante  poke 1
+  	li $a1, 1  #defensor
+  	jal calculoDaño	
+  	move $s4, $v0			#s4 esta el daño
+  	
+  	li $a0, 1 #atacante  poke 2
+  	li $a1, 2  #defensor
+  	jal calculoDaño	
+  	move $s5, $v0			#s5 esta el daño
+bucle:  
+  	#imprime formatos
+  	li $v0, 4
+        la $a0, poke1			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        la $a0, text6
+        syscall
+        li $v0, 4
+        la $a0, poke2
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        li $v0, 4
+        la $a0, text5
+        syscall
+  	
+  	#Calculo ataque 1
+        sub $s3, $s3, $s4  #restar de la vida del poke2	
+        slti $t0, $s3, 1
+        beqz $t0 ,seguir
+        li $s3, 0
+        addi $s6, $s6, 1
+seguir:	
+  	li $v0, 4
+        la $a0, poke1			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        la $a0, poke2
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	
+ 
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        
+        bnez $s6, continuar
+        
+  	#imprimir formato de segundo ataque
+  	li $v0, 4
+        la $a0, poke2
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	li $v0, 4
+        la $a0, text6
+        syscall
+  	li $v0, 4
+        la $a0, poke1			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        li $v0, 4
+        la $a0, text5
+        syscall
+        
+  	#Calculo ataque 2
+  	sub $s2, $s2, $s5   #restar de la vida del poke1
+  	slti $t0, $s2, 1
+        beqz $t0 ,seguir2
+        li $s2, 0
+        addi $s6, $s6, 1
+seguir2:	
+  	li $v0, 4
+        la $a0, poke1			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        la $a0, poke2
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        
+        bnez $s6, continuar
+         
+        j bucle
+
+continuar:  	
+	beqz $s2, segunda
+	li $v0, 4
+        la $a0, text9
+        syscall
+	li $v0, 4
+        la $a0, poke1
+        syscall
+        li $v0, 4
+        la $a0, text7
+        syscall
+        
+        j terminar
+segunda:
+	li $v0, 4
+        la $a0, text9
+        syscall
+	li $v0, 4
+        la $a0, poke2
+        syscall
+        li $v0, 4
+        la $a0, text7
+        syscall
+	
+	
+terminar:
+  	#termian el programa
+	li $v0, 10
+	syscall
+
+calculoDaño:
+	addi $sp, $sp, 4
+	sw   $ra, 0($sp) 
+	# addr= base address + ((row index * columm size)  + columm index) * DATA_SIZE
+	mul  $t0,$a1, $s1	#row index * columm size
+	add  $t0, $t0, $a0	#         + columm index
+	mul $t0, $t0, DATA_SIZE	#         * DATA_SIZE
+	add $t0,$t0, $s0	#          + base address
+	l.s $f0, 0($t0)	 
+	l.s $f1, fconst
+	mul.s $f2, $f0, $f1   
+	cvt.w.s $f0, $f2
+	mfc1 $t0, $f0
+	move $v0, $t0
+	
+	lw   $ra, 0($sp) 
+	addi $sp, $sp, 4
+	jr $ra
