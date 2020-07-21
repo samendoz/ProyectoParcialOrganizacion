@@ -1,0 +1,823 @@
+#Proyecto Primer Parcial Organizacion de Computadores
+#Combate Pokemon
+#Petter de La Cruz
+#Sebastian Mendoza
+
+
+	.data
+#el archivo debe estar en la misma carpeta que el proyecto
+ndArray:.float 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+		.float  2.0, 1.0, 0.5, 0.5, 1.0, 2.0, 0.5, 0.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5
+		.float  1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0
+		.float  1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 0.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0
+		.float  1.0, 1.0, 0.0, 2.0, 1.0, 2.0, 0.5, 1.0, 2.0, 2.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0 
+		.float  1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 2.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0
+		.float  1.0, 0.5, 0.5 ,0.5, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 2.0, 0.5
+		.float  0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0
+		.float  1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 1.0, 2.0, 1.0, 1.0, 2.0
+		.float  1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5, 0.5, 2.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0 
+		.float  1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 2.0, 0.5, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0
+		.float  1.0, 1.0, 0.5, 0.5, 2.0, 2.0, 0.5, 1.0, 0.5, 0.5, 2.0, 0.5, 1.0, 1.0, 1.0, 0,5, 1.0, 1.0
+		.float  1.0, 1.0, 2.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0
+		.float  1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 0.0, 1.0
+		.float  1.0, 1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 2.0, 1.0, 1.0, 0.5, 2.0, 1.0, 1.0
+		.float  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 0.0
+		.float  1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5
+		.float  1.0, 2.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0
+	size: .word 18
+	fconst: .float 2.0
+	.eqv DATA_SIZE 4
+texta:  .asciiz "Error al abrir el archivo! \n"
+textb:  .asciiz "Error al leer el archivo! \n"
+textc:  .asciiz "Error al escribir el contenido del Buffer! \n"
+#archivo: .asciiz "pokeTypes.txt" #var final nombre archivo
+archivo: .asciiz "C:\\Users\\pette\\Desktop\\pokeTypes.txt"
+buffer: .space 2000
+prueba: .asciiz "normal,fight,flying,poison,ground,rock,bug,ghost,steel,fire,water,grass,electric,psychic,ice,dragon,dark,fairy"
+prueba1: .asciiz "poison"
+text1: .asciiz "Combatientes: "
+	text2:  .asciiz " vs "
+	text3:  .asciiz " Vida:"
+	text4:  .asciiz " Ataque: "
+	text5:  .asciiz "Resultados del ataque: \n"
+	text6:  .asciiz " ataca a " 
+	text7:  .asciiz " es el ganador ! "
+	text8:  .asciiz ":"
+	text9: .asciiz "!"
+texto1:  .asciiz "Bienvenido al sistema de combates pokemon:\n"
+	texto2:  .asciiz "Error: Ingrese un número  valido (1 al 10):"
+	text10:  .asciiz "8. "
+	text11:  .asciiz "9. "
+	text12:  .asciiz "10. "	
+	text13:  .asciiz "11 . Salir\n"
+	text14:  .asciiz "Ingrese el numero del primer pokemon para el combate: "
+	text15:  .asciiz "Ingrese el numero del segundo pokemon para el combate: "
+	text16:  .asciiz "Combatientes: "
+	text17:  .asciiz " vs "
+	text18:  .asciiz " Vida:"
+	text19:  .asciiz " Ataque: "
+	text20:  .asciiz "Resultados del ataque: "
+	text21:  .asciiz " ataca a " 
+	text22:  .asciiz " es el ganador! "
+	text23:  .asciiz ". "	
+	salto:  .asciiz "\n"
+arrTipos: 
+	.align 2
+	.space 440
+arrPokemones: 
+	.align 2
+	.space 440
+buffer2: .space 20
+.text
+
+main:
+	#Open File
+	li $v0, 13 #13 es system call para abrir archivo
+	la $a0, archivo #cargo ruta como argumento
+	li $a1, 0 #lectura
+	li $a2, 0 # se ignora el modo
+	syscall # ejecuta el comando 13 y abre el archivo
+	beq $v0, -1, LogErrorOpen
+	move $s0, $v0 # descriptor de archivo
+
+	#Read File
+	li $v0, 14 # comando para lectura
+	move $a0, $s0 # descriptor de archivo como argumento
+	la $a1, buffer #buffer de donde se leera
+	li $a2, 2000 #tamano del buffer
+	syscall
+	beq $v0, -1, LogErrorRead
+
+	
+	jal Split
+	
+	#Imprimir texto
+        li $v0, 4
+        la $a0, texto1
+        syscall
+	
+	li $v0, 42  
+	li $a1, 99
+	syscall  
+	
+	move $s4, $a0
+	
+        
+	jal imprimirPokemon
+	
+	#Imprimir texto
+        li $v0, 4
+        la $a0, text13
+        syscall
+        
+        #Imprimir texto
+        li $v0, 4
+        la $a0, text14
+        syscall
+        
+        jal pedirNumero
+        move $s0,$v0       
+        
+        #Imprimir texto
+        li $v0, 4
+        la $a0, text15
+        syscall
+        
+        jal pedirNumero
+        move $s1,$v0
+               
+        
+        li $v0, 4
+        la $a0, salto
+        syscall
+        
+        
+        #hemos pedido los numeros y estan en s0 y s1
+        
+        addi $s0, $s0, -1
+        addi $s1, $s1, -1
+        add $s0, $s0, $s4
+        add $s1, $s1, $s4
+        sll $s0, $s0, 2
+        sll $s1, $s1, 2
+        la $t0, arrPokemones
+        add $s2, $s0, $t0
+        add $s3, $s1, $t0
+        move $s5, $s0
+        move $s7, $s1 
+        
+        
+        
+        
+        li $v0, 4
+        la $a0, text1
+        syscall
+        li $v0, 4
+        lw $a0, 0($s2)
+        syscall
+        li $v0, 4
+        la $a0, text2
+        syscall
+        li $v0, 4
+        lw $a0, 0($s3)
+        syscall
+        li $v0, 4
+        la $a0, salto
+        syscall
+        
+        lw $t6, 0($s2)
+        lw $t7, 0($s3)
+        
+        la $s0, ndArray
+  	lw $s1, size
+  	li $s2, 5  # vida poke1
+  	li $s3, 5   #vida poke2
+  	li $s6, 0   #bandera
+  	
+  	
+  	li $v0, 4
+  	la $a0,prueba
+        syscall
+  	
+        
+        #se calculan los daños
+        la $t0, arrTipos
+        add $t1, $s5, $t0
+        add $t2,  $s7, $t0
+        move  $a1, $t2
+        #lw $a0, 0($t1)
+        move $a0, $t1
+        jal StrCompare
+        move $t3, $v0
+        move $a0, $v0
+        li $v0, 1
+        syscall
+        
+        # lw $a0, 0($t2)
+        move $a0, $a1
+        jal StrCompare
+        move $t4, $v0
+        move $a0, $v0
+        li $v0, 1
+        syscall
+        
+        move $a0, $t4
+        move $a1, $t3
+        
+        
+	#li $a0, 2 #atacante  poke 1
+  	#li $a1, 1  #defensor
+  	jal calculoDaño	
+  	move $s4, $v0			#s4 esta el daño
+  	
+  	
+  	move $a0, $t3
+        move $a1, $t4
+        
+  	#li $a0, 1 #atacante  poke 2
+  	#li $a1, 2  #defensor
+  	jal calculoDaño	
+  	move $s5, $v0			#s5 esta el daño
+bucle:  
+  	#imprime formatos
+  	li $v0, 4
+        move $a0, $t6			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        la $a0, text6
+        syscall
+        li $v0, 4
+        move $a0, $t7
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        li $v0, 4
+        la $a0, text5
+        syscall
+  	
+  	#Calculo ataque 1
+        sub $s3, $s3, $s4  #restar de la vida del poke2	
+        slti $t0, $s3, 1
+        beqz $t0 ,seguir
+        li $s3, 0
+        addi $s6, $s6, 1
+seguir:	
+  	li $v0, 4
+        move $a0, $t6			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        move $a0, $t7
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	
+ 
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        
+        bnez $s6, continuar
+        
+  	#imprimir formato de segundo ataque
+  	li $v0, 4
+        move $a0, $t7
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	li $v0, 4
+        la $a0, text6
+        syscall
+  	li $v0, 4
+        move $a0, $t6			
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        li $v0, 4
+        la $a0, text5
+        syscall
+        
+  	#Calculo ataque 2
+  	sub $s2, $s2, $s5   #restar de la vida del poke1
+  	slti $t0, $s2, 1
+        beqz $t0 ,seguir2
+        li $s2, 0
+        addi $s6, $s6, 1
+seguir2:	
+  	li $v0, 4
+        move $a0, $t6		
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+        li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s2
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s4
+  	syscall
+  	li $v0, 4
+        move $a0, $t7
+        syscall
+        li $v0, 4
+        la $a0, text8
+        syscall
+  	li $v0, 4
+        la $a0, text3
+        syscall
+        li $v0, 1
+        move $a0, $s3
+        syscall
+        li $v0, 4
+        la $a0, text4
+        syscall
+  	li $v0, 1
+        move $a0, $s5
+  	syscall
+  	
+  	li $v0, 4
+        la $a0, salto
+        syscall
+        
+        bnez $s6, continuar
+         
+        j bucle
+
+continuar:  	
+	beqz $s2, segunda
+	li $v0, 4
+        la $a0, text9
+        syscall
+	li $v0, 4
+        move $a0, $t6
+        syscall
+        li $v0, 4
+        la $a0, text7
+        syscall
+        
+        j Exit
+segunda:
+	li $v0, 4
+        la $a0, text9
+        syscall
+	li $v0, 4
+        move $a0, $t7
+        syscall
+        li $v0, 4
+        la $a0, text7
+        syscall
+        
+	j Exit
+	
+	#la $t0, arrTipos
+	#lw $a0, 0($t0)
+	#li $v0, 4
+	#syscall
+	
+imprimirPokemon:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+	li $t0, 0
+	la $t7, arrPokemones
+	sll $a0,$a0, 2
+	add $t7, $t7, $a0
+	move $t5, $a0
+bucle2:
+	slti $t1, $t0, 10  
+	beqz $t1, salirbucle2
+	sll $t2,$t0, 2
+	add $t3, $t7, $t2
+	addi $t4, $t0, 1
+	
+	li $v0, 1
+	move $a0, $t4
+	syscall
+	
+	li $v0, 4
+	la $a0, text23
+	syscall
+	
+	lw $a0, 0($t3)
+	li $v0, 4
+	syscall
+	
+	li $v0, 4
+	la $a0, salto
+	syscall
+	
+	
+	addi $t0, $t0, 1
+	
+	j bucle2
+salirbucle2:
+	lw   $ra, 0($sp)
+	addi $sp, $sp, -4
+	
+	jr $ra
+	
+	#Imprimir texto
+        li $v0, 4
+        la $a0, text1
+        syscall
+        
+	#Imprimir texto
+        li $v0, 4
+        la $a0, text14
+        syscall
+        
+        jal pedirNumero
+        move $s0,$v0       
+        
+        #Imprimir texto
+        li $v0, 4
+        la $a0, text15
+        syscall
+        
+        jal pedirNumero
+        move $s1,$v0
+        
+        #Print numero
+        li $v0, 1
+        move $a0, $s0
+        syscall        
+        
+        li $v0, 4
+        la $a0, salto
+        syscall
+        
+        #Print numero
+        li $v0, 1
+        move $a0, $s1
+        syscall
+	
+	
+	
+	#move 
+	#jal StrCompare
+	#move $s3, $v0
+	j Exit
+LogErrorOpen:
+	li $v0, 4
+        la $a0, texta
+        syscall
+	j Exit
+
+LogErrorRead:
+	li $v0, 4
+        la $a0, textb
+        syscall
+	j Exit
+
+LogErrorWriteBuffer:
+	li $v0, 4
+        la $a0, textc
+        syscall
+	j Exit
+
+Split: 
+	addi $sp, $sp, -4
+	sw $ra, 0($sp)
+	#condiciones previas
+	li $s0, 44 # valor ascii de la coma ","
+	li $s1, 10 # valor ascii del salto de linea
+	li $t1, 1 #posicion a guardar pokemon
+	li $t2, 0 #posicion a guardar tipo
+	la $s2, buffer #direccion buffer
+	la $s3, arrPokemones #array pokemons
+	la $s4, arrTipos #arr tipos de cada pokemon
+	li $t6, 0 #contador caracteres
+	sw $s2, 0($s3) # primer item de pokemones es la direccion inicial del buffer
+	#sw $s2, 0($s4)
+	j Loop
+	
+Loop: 
+	add $t7, $s2, $t6 # buffer + desplCaracter
+	lb $t8, 0($t7) # caracter guardado en t8
+	beq $t8, $s0, ReemplazarComa # si el caracter es igual a la ","
+	beq $t8, $s1, ReemplazarEOL # si el caracter es igual al salto de linea "\n"
+	beq $t8, $zero, Finalizar #si el caracter es el nulo termina la rutina
+	addi $t6, $t6, 1 #muevo la direccion al siguiente caracter a analizar
+	j Loop
+	
+ReemplazarComa:
+	sb $zero, 0($t7) # pongo 0 donde estaba la ","
+	addi $t9, $t7, 1 #direecion donde arranca despues de la coma
+	sll $t3, $t2, 2 #despl guardar tipo
+	add $t4, $t3, $s4
+	sw $t9, 0($t4) #guardo direccion de tipo en el arreglo de tipos
+	addi $t2, $t2, 1 #incremento posicion de tipo en 1
+	addi $t6, $t6, 1 #muevo la direccion al siguiente caracter a analizar
+	j Loop
+	
+ReemplazarEOL:
+	sb $zero, 0($t7) # pongo 0 donde estaba el salto de linea
+	addi $t9, $t7, 1 #direecion donde arranca despues del salto
+	sll $t3, $t1, 2 #despl guardar pokemon
+	add $t4, $t3, $s3
+	sw $t9, 0($t4) #guardo direccion de Pokemon en el arreglo de pokemones
+	addi $t1, $t1, 1 #incremento posicion de pokemon en 1
+	addi $t6, $t6, 1 #muevo la direccion al siguiente caracter a analizar
+	j Loop
+	
+Finalizar:
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
+Exit:
+	li $v0, 10
+	syscall
+
+StrCompare:
+	addi $sp, $sp, -28
+	sw $ra, 0($sp)
+	sw $s0, 4($sp)
+	sw $s1, 8($sp)
+	sw $s2, 12($sp)
+	sw $s3, 16($sp)
+	sw $t3, 20($sp)
+	sw $t4, 24($sp)
+	#condiciones iniciales
+	li $s0, 44 # valor ascii de la coma ","
+	la $s1, prueba #atring con todos los tipos pokemon
+	lw $s2, 0($a0) #tipo de prueba
+	#li $v0, 4
+	#move $a0, $s2
+	#syscall
+	li $t0, 0 # i
+	li $t1, 1 # j
+	li $s3, 0 #posicion del substring en el arreglo de tipos
+	j Loopi
+	
+Loopi:
+	add $t2, $s1, $t0 #tipos +i
+	lb $t3, 0($t2) #cargo el caracter
+	lb $t4, 0($s2) #primer caracter del tipo objetivo
+	#li $v0, 1
+	#move $a0, $t4
+	#syscall
+	beq $t3, $zero, Salir #se llego al final del string y no se encontro
+	beq $t3, $s0, Escoma #si es caracter es la coma
+	beq $t3, $t4, Loopj #si son iguales se comparan los caracteres siguientes
+	addi $t0, $t0, 1 #si no son siguientes se avanza al siguiente caracter de tipos
+	
+	j Loopi
+
+Escoma:
+	addi $s3, $s3, 1
+	addi $t0, $t0, 1
+	j Loopi
+Loopj:
+	add $t2, $s1, $t0
+	add $t2, $t2, $t1 #tipos +i +j
+	lb $t3, 0($t2)
+	#li $v0, 1
+	#move $a0, $t3
+	#syscall
+	add $t4, $s2, $t1 #tipo objetivo +i
+	lb $t4, 0($t4)
+	#li $v0, 1
+	#move $a0, $t4
+	#syscall
+	beq $t3, $s0, Encontrado #si llegamos a 0 es que el string es igual y se debe retornar
+	bne $t3, $t4, SalirLoopJ #si los caracteres no son iguales se sale del loopj
+	addi $t1, $t1, 1 #si siguen siendo iguales vamos al siguiente
+	j Loopj
+	
+SalirLoopJ:
+	li $t1, 1 #reinicio j
+	addi $t0, $t0, 1 # i++
+	j Loopi
+
+Encontrado:
+	#li $v0, 4
+	#la $a0, text1
+	#syscall #imprimimos la posicion del substring
+	j Salir
+Salir:
+	move $v0, $s3 #imprimimos la posicion del substringsw $s0, 4($sp)
+	lw $t4, 24($sp)
+	lw $t3, 20($sp)
+	lw $s3, 16($sp)
+	lw $s2, 12($sp)
+	lw $s1, 8($sp)
+	lw $s0, 4($sp)
+	lw $ra, 0($sp)
+	addi $sp, $sp, 28
+	jr $ra
+
+#inicio funcion pedir numero
+pedirNumero:
+	
+	addi $sp, $sp, -24
+	sw $s4, 20($sp)
+	sw   $ra, 16($sp)      
+	sw $s0, 12($sp)
+	sw $s1, 8($sp)
+	sw $s2, 4($sp)
+	sw $s3, 0($sp)
+
+        
+regreso:
+        #Obtener string de usuario
+        li $s4, 10
+        li $v0, 8
+        la $a0, buffer
+        li $a1, 20
+        syscall
+
+	#verificar entero entre numeros
+	#Obtiene el primer y posible segundo digito
+	la $s0, buffer
+	lbu   $s1, ($s0)      
+	lbu   $s2, 1 ($s0)
+	lbu   $s3  2 ($s0)
+	
+	# verificamos caso de 2 digitos
+	#verifica el caso de decena siendo  1
+	sltiu $t2, $s1, 49                # t1 = (x < 1) ? 1 : 0
+    	bnez  $t2, fallo
+    	sltiu $t2, $s1, 50                # t1 = (x < 2) ? 1 : 0
+    	beqz  $t2, caso2
+    	beq  $s2,$s4, proseguir           #En caso de que se ingreso solo el digito 1
+    	
+    	#verificamos
+    	sltiu $t2, $s2, 48                 # t1 = (x < 0) ? 1 : 0
+    	bnez  $t2, fallo
+    	sltiu $t2, $s2, 50                 # t1 = (x < 2) ? 1 : 0
+    	beqz  $t2, fallo
+    	
+    	#verifiacmos que no posea tercer digito   	
+    	bne  $s3,$s4, fallo
+    	
+    	j proseguir
+ 
+ caso2:
+ 	#verificamos caso de un solo digito	
+   	sltiu $t2, $s1, 49                    # t1 = (x < 49) ? 1 : 0
+    	bnez  $t2, fallo
+    	sltiu $t2, $s1, 58                    # t1 = (x < 58) ? 1 : 0
+    	beqz  $t2, fallo
+    		
+    	#verifiacmos que no posea segundo digito   	
+    	bne  $s2,$s4, fallo
+    	
+proseguir:
+	move $a0, $s0
+	jal convStringtoInt
+
+	lw $s3, 0($sp)
+	lw $s2, 4($sp)
+	lw $s1, 8($sp)
+	lw $s0, 12($sp)
+	lw  $ra, 16($sp) 
+	lw $s4, 20($sp)     
+	addi $sp, $sp, 24
+	
+	jr $ra
+	
+fallo:	
+	#Imprimir texto y pide de nuevo
+	li $v0, 4
+        la $a0, texto2
+        syscall
+	
+	j regreso
+	
+#fin funcion pedir numero
+
+#inicio funcion convertir de string a entero
+convStringtoInt:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+	
+	li $t0, 0                            #acumulador
+	li $t1, 10			     #codigo nueva linea
+	move $t2, $a0			     #obtener direccion de string
+	lbu $t3, ($t2)
+	addi $t0,$t3,-48		     #conversion del primer digito
+	addi $t2, $t2, 1
+	lbu $t3, ($t2)
+	
+bucleint:
+	beq $t3, $t1, enviar		     #verificamos si el string valido termino
+	addi $t4,$t3,-48
+	mul $t0, $t0, 10		     #multplicamos por 10 para pasar de unidad a decena etc
+	add $t0, $t0, $t4		     #sumamos el sigueinte digito
+	addi $t2, $t2, 1      		     #avanzamos en string
+   	lbu $t3, ($t2) 	
+	j bucleint
+
+enviar:
+	move $v0,$t0
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
+
+#fin funcion convertir string a entero	
+
+calculoDaño:
+	li $v0, 1
+	syscall
+	addi $sp, $sp, 4
+	sw   $ra, 0($sp) 
+	# addr= base address + ((row index * columm size)  + columm index) * DATA_SIZE
+	mul  $t0,$a1, $s1	#row index * columm size
+	add  $t0, $t0, $a0	#         + columm index
+	mul $t0, $t0, DATA_SIZE	#         * DATA_SIZE
+	add $t0,$t0, $s0	#          + base address
+	l.s $f0, 0($t0)	 
+	li $v0, 4
+	la $a0, salto
+	syscall
+	li $v0, 2
+	mov.s $f12, $f0
+	syscall
+	l.s $f1, fconst
+	li $v0, 2
+	mov.s $f12, $f1
+	syscall
+	mul.s $f2, $f0, $f1  
+	li $v0, 2
+	mov.s $f12, $f2
+	syscall
+	 
+	cvt.w.s $f0, $f2
+	mfc1 $t0, $f0
+	move $v0, $t0
+	
+	lw   $ra, 0($sp) 
+	addi $sp, $sp, 4
+	jr $ra
